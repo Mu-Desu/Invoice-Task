@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'styles/me.css' %}">
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <title>MU Invoice Task</title>
+</head>
+
+<body>
+    <div class="container">
+
+        <form action="" x-data="{total:0,pric:0,tax:1,paid:0}">
+            <div class="mb-3 mt-3">
+                <h5>Invoice</h5>
+
+
+                <label class="logo">
+                    <input type="file" accept="image/*" class="" required>
+                    +Add Logo
+                </label>
+                <p><span class="red">*</span> fields are required</p>
+                <label for="1" class="form-label">From :<span class="red">*</span> </label>
+                <input type="text" class="form-control " id="1" placeholder="who is this invoice from?" required>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="2" class="form-label">Bill To :<span class="red">*</span> </label>
+                <input type="text" class="form-control " id="2" placeholder="Who is this invoice to?" required>
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="3" class="form-label">Ship To : </label>
+                <input type="text" class="form-control " id="3">
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="4" class="form-label">Date : </label>
+                <input type="date" class="form-control " id="4">
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="5" class="form-label">Due Date : </label>
+                <input type="date" class="form-control " id="5">
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="6" class="form-label">PO Number : </label>
+                <input type="text" class="form-control " id="6">
+            </div>
+            <div class="mb-3 mt-3">
+                <label for="7" class="form-label">Payment Terms : </label>
+                <input type="text" class="form-control " id="7">
+            </div>
+            <div>
+
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Item Name</th>
+                            <th scope="col">Quantity</th>
+                            <th scope="col">Rate</th>
+                            <th scope="col">Amount</th>
+                        </tr>
+                    </thead>
+                </table>
+                <div x-data="addRemove()">
+
+                    <template x-for="(field, index) in fields" :key="field.id">
+                        <div x-data="{qty:'',price:''}">
+                            <input type="text" name="txt1[]" class="wd" placeholder="Description">
+                            <input type="number" name="txt1[]" class="wd" placeholder="Quantity" x-model="qty">
+                            <input type="number" name="txt1[]" class="wd" placeholder="Price" x-model="price">
+                            <a x-model="total =+ qty*price"></a>
+                            Total $<span class="total" x-text="qty*price"></span>
+                            <button ml-2 type="button" class="btn btn-danger btn-small"
+                                @click="removeField(field)">&times;</button>
+                        </div>
+                    </template>
+
+
+
+                    <button type="button" class="btn btn-success" @click="addNewField()">+ Line Item</button>
+                </div>
+            </div>
+
+            <div class="mb-3 mt-3">
+                <label for="8" class="form-label">Notes : </label>
+                <input type="text" class="form-control " placeholder="Notes - any relevant info not covered" id="8">
+            </div>
+            <div class="mb-3 mt-3" x-data="{}">
+                <label class="form-label">Subtotal : </label>
+                <span x-text="pric+=total*tax">$</span><br>
+                <label for="9" class="form-label">Tax : </label>
+                <input type="number" placeholder="%" id="9" x-model="tax"><br>
+                <label class="form-label">Total : </label>
+                <span x-text="pric">$</span><br>
+                <label class="form-label">Ammount Paid : </label>
+                <input type="number" placeholder="%" id="9" x-model="paid"><br>
+                <label class="form-label">Balance Due : </label>
+                <span x-text="pric-paid">$</span><br>
+            </div>
+            <button class="btn btn-success">Send Invoice</button>
+        </form>
+    </div>
+
+
+
+
+
+    <script>
+        function addRemove() {
+            return {
+                fields: [],
+                addNewField() {
+                    this.fields.push({ id: new Date().getTime() + this.fields.length });
+                },
+                removeField(field) {
+                    this.fields.splice(this.fields.indexOf(field), 1);
+                }
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
